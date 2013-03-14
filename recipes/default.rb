@@ -18,19 +18,7 @@
 
 include_recipe "erlang"
 
-cookbook_file "/opt/skystack/local/skystackrs.zip" do
-  source "skystackrs.zip"
-  owner "root"
-  group "skystack"
-  mode "0644"
-  ignore_failure true
-end
-
+execute "cd /opt/skystack/local; wget -O skystackrs.zip #{node['outpost']['host']}/#{node['outpost']['version']}/skystackrs.zip"
 execute "cd /opt/skystack/local; unzip skystackrs.zip"
 execute "cd /opt/skystack/local/skystackrs; make; ./start.sh"
 
-#get source for outpost
-
-#install it
-
-#start it
