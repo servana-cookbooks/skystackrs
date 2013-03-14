@@ -1,0 +1,31 @@
+{
+"maintainer": "Skystack Ltd",
+"replacing": {},
+"dependencies": {},
+"recipes": {
+ "outpost::default": "outpost::default | Configures the Outpost monitoring client"
+},
+"maintainer_email": "team@skystack.com",
+"groupings": {},
+"recommendations": {},
+"platforms": {
+  "debian": [
+
+  ],
+  "centos": [
+
+  ],
+  "ubuntu": [
+
+  ],
+  "redhat": [
+
+  ]
+},
+	"license": "Apache 2.0",
+	"version": "0.01",
+	"suggestions": {},
+	"name": "outpost",
+	"conflicting": {},
+	"description": "Skystack Remote Client affectionately known as Outpost, a low resource but stable app for collecting useful data from your server and send it back to base."
+}
