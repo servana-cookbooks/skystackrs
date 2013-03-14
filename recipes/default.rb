@@ -18,7 +18,6 @@
 
 include_recipe "erlang"
 
-execute "cd /opt/skystack/local; wget -O skystackrs.zip #{node['outpost']['host']}/#{node['outpost']['version']}/skystackrs.zip"
-execute "cd /opt/skystack/local; unzip skystackrs.zip"
-execute "cd /opt/skystack/local/skystackrs; make; ./start.sh"
-
+execute "cd /opt/skystack/local; wget #{node['outpost']['host']}/#{node['outpost']['version']}/client.skystackrs-master.zip"
+execute "cd /opt/skystack/local; unzip client.skystackrs-master.zip"
+execute "cd /opt/skystack/local/client.skystackrs-master.zip; make; ./detached-start.sh"
