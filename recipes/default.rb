@@ -72,7 +72,7 @@ execute "unzip skystackrs" do
 end
 
 execute "delete zip skystackrs" do
-    cwd node['skystackrs']['path']}
+    cwd node['skystackrs']['path']
     command "rm client.skystackrs-master.zip"
     user "skystack"
     group "skystack"
