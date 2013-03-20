@@ -57,15 +57,23 @@ directory '/opt/skystack/logs/skystackrs' do
     recursive true
 end
 
+execute "delete prev client.skystackrs-master.zip if exists" do
+	cwd node['skystackrs']['path']
+	command "rm client.skystackrs-master.zip"
+	user "skystack"
+	group "skystack"
+	only_if do File.exists?("#{node['skystackrs']['path']}/client.skystackrs-master.zip") end
+end
+
 execute "download skystackrs" do
-	cwd "#{node['skystackrs']['path']}"
+	cwd node['skystackrs']['path']
 	command "wget #{node['skystackrs']['host']}/#{node['skystackrs']['version']}/client.skystackrs-master.zip"
 	user "skystack"
 	group "skystack"
 end
 
 execute "unzip skystackrs" do
-	cwd "#{node['skystackrs']['path']}"
+	cwd node['skystackrs']['path']
 	command "unzip client.skystackrs-master.zip"
 	user "skystack"
 	group "skystack"
