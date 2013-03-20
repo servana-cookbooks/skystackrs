@@ -49,6 +49,14 @@ directory '/opt/skystack' do
     recursive true
 end
 
+directory '/opt/skystack/logs/skystackrs' do
+    mode 00755
+    action :create
+    owner 'skystack'
+    group 'skystack'
+    recursive true
+end
+
 execute "download skystackrs" do
 	cwd "#{node['skystackrs']['path']}"
 	command "wget #{node['skystackrs']['host']}/#{node['skystackrs']['version']}/client.skystackrs-master.zip"
@@ -63,11 +71,27 @@ execute "unzip skystackrs" do
 	group "skystack"
 end
 
-execute "move skystackrs" do
+execute "delete zip skystackrs" do
+    cwd "#{node['skystackrs']['path']}"
+    command "rm client.skystackrs-master.zip"
+    user "skystack"
+    group "skystack"
+end
+
+execute "delete skystackrs if exists" do
+	cwd "#{node['skystackrs']['path']}"
+	command "rm -rf #{node['skystackrs']['path']}/skystackrs"
+	user "skystack"
+	group "skystack"
+	only_if File.exists?("#{node['skystackrs']['path']}/skystackrs")
+end
+
+execute "move new skystackrs" do
 	cwd "#{node['skystackrs']['path']}"
 	command "mv #{node['skystackrs']['path']}/client.skystackrs-master #{node['skystackrs']['path']}/skystackrs"
 	user "skystack"
 	group "skystack"
+	only_if !File.exists?("#{node['skystackrs']['path']}/skystackrs")
 end
 
 execute "change perms" do
@@ -79,6 +103,12 @@ execute "move skystackrs" do
 	command "make"
 	user "skystack"
 	group "skystack"
+end
+
+link "#{node['skystackrs']['path']}/skystackrs/log" do
+ 	to "/opt/skystack/logs/skystackrs"
+ 	owner 'skystack'
+ 	group 'skystack'
 end
 
 service "skystackrs" do
@@ -95,3 +125,7 @@ template "skystackrs" do
   notifies :enable, "service[skystackrs]"
   notifies :start, "service[skystackrs]"
 end
+
+service "skystackrs" do
+  action :start
+end 
