@@ -20,17 +20,21 @@ include_recipe "erlang"
 
 
 group node['skystackrs']['group'] do
-  gid node['skystackrs']['group']
   system true
   action :create
 end
 
 user node['skystackrs']['user'] do
-  gid node['skystackrs']['group']
   shell "/bin/bash"
   supports :manage_home => false
   system true
   action :create
+end
+
+group node['skystackrs']['group'] do
+  action :modify
+  members "#{node['skystackrs']['user']}"
+  append true
 end
 
 directory '/home/skystack' do
