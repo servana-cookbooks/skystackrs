@@ -9,7 +9,7 @@
 # Description:       start/stop skystack remote server
 ### END INIT INFO
 
-USER=<%= node['skystackrs']['user'] %>
+SSUSER=<%= node['skystackrs']['user'] %>
 LOCAL_PATH=<%= node['skystackrs']['path'] %>/skystackrs
 PA="$LOCAL_PATH/ebin $LOCAL_PATH/deps/*/ebin $LOCAL_PATH/dist/*/ebin"
 
@@ -19,7 +19,7 @@ export HEART_COMMAND="/etc/init.d/skystackrs start"
 case $1 in
 
   start)
-    su $USER -c "export HOME=$LOCAL_PATH; erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
+    su $SSUSER -c "export HOME=$LOCAL_PATH;cd $LOCAL_PATH; erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
          -heart -detached -s skystackrs start"
     echo  "Starting Skystack Remote Server"
     ;;
@@ -29,7 +29,7 @@ case $1 in
     echo  "Starting Skystack Remote Server In Debug mode"
     ;;
   stop)
-    su $USER -c "export HOME=$LOCAL_PATH; erl -pa $PA -sname stateserver_stop \
+    su $SSUSER -c "export HOME=$LOCAL_PATH;cd $LOCAL_PATH; erl -pa $PA -sname stateserver_stop \
            -noshell -s skystackrs stop_node skystackrs@$HOSTNAME"
     echo "Stopping Skystack Remote Server"
     ;;
