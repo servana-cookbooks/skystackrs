@@ -18,26 +18,30 @@
 
 include_recipe "erlang"
 
-
 group node['skystackrs']['group'] do
   system true
   action :create
 end
 
 user node['skystackrs']['user'] do
+  gid node['skystackrs']['group']
   shell "/bin/bash"
   supports :manage_home => false
   system true
   action :create
 end
 
-group node['skystackrs']['group'] do
-  action :modify
-  members "#{node['skystackrs']['user']}"
-  append true
+execute "change perms" do
+	command "chown -R skystack:skystack /opt/skystack"
 end
 
-directory '/home/skystack' do
+#group node['skystackrs']['group'] do
+#  action :modify
+#  members "#{node['skystackrs']['user']}"
+#  append true
+#end
+
+directory '/opt/skystack' do
     mode 00755
     action :create
     owner 'skystack'
