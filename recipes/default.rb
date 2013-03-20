@@ -72,26 +72,26 @@ execute "unzip skystackrs" do
 end
 
 execute "delete zip skystackrs" do
-    cwd "#{node['skystackrs']['path']}"
+    cwd node['skystackrs']['path']}
     command "rm client.skystackrs-master.zip"
     user "skystack"
     group "skystack"
 end
 
 execute "delete skystackrs if exists" do
-	cwd "#{node['skystackrs']['path']}"
+	cwd node['skystackrs']['path']
 	command "rm -rf #{node['skystackrs']['path']}/skystackrs"
 	user "skystack"
 	group "skystack"
-	only_if File.exists?("#{node['skystackrs']['path']}/skystackrs")
+	only_if do File.exists?("#{node['skystackrs']['path']}/skystackrs") end
 end
 
 execute "move new skystackrs" do
-	cwd "#{node['skystackrs']['path']}"
+	cwd node['skystackrs']['path']
 	command "mv #{node['skystackrs']['path']}/client.skystackrs-master #{node['skystackrs']['path']}/skystackrs"
 	user "skystack"
 	group "skystack"
-	only_if !File.exists?("#{node['skystackrs']['path']}/skystackrs")
+	only_if do !File.exists?("#{node['skystackrs']['path']}/skystackrs") end
 end
 
 execute "change perms" do
