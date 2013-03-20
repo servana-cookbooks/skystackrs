@@ -19,6 +19,11 @@
 include_recipe "erlang"
 
 
+group node['skystackrs']['group'] do
+  gid node['skystackrs']['group']
+  system true
+  action :create
+end
 
 user node['skystackrs']['user'] do
   gid node['skystackrs']['group']
