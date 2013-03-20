@@ -18,10 +18,55 @@
 
 include_recipe "erlang"
 
-execute "cd #{node['skystackrs']['path']}; wget #{node['skystackrs']['host']}/#{node['skystackrs']['version']}/client.skystackrs-master.zip"
-execute "cd #{node['skystackrs']['path']}; unzip client.skystackrs-master.zip"
-execute "mv #{node['skystackrs']['path']}/client.skystackrs-master #{node['skystackrs']['path']}/skystackrs"
-execute "cd #{node['skystackrs']['path']}/skystackrs; make;"
+
+
+user node['skystackrs']['user'] do
+  gid node['skystackrs']['group']
+  shell "/bin/bash"
+  supports :manage_home => false
+  system true
+  action :create
+end
+
+directory '/home/skystack' do
+    mode 00755
+    action :create
+    owner 'skystack'
+    group 'skystack'
+    recursive true
+end
+
+execute "download skystackrs" do
+	cwd "#{node['skystackrs']['path']}"
+	command "wget #{node['skystackrs']['host']}/#{node['skystackrs']['version']}/client.skystackrs-master.zip"
+	user "skystack"
+	group "skystack"
+end
+
+execute "unzip skystackrs" do
+	cwd "#{node['skystackrs']['path']}"
+	command "unzip client.skystackrs-master.zip"
+	user "skystack"
+	group "skystack"
+end
+
+execute "move skystackrs" do
+	cwd "#{node['skystackrs']['path']}"
+	command "mv #{node['skystackrs']['path']}/client.skystackrs-master #{node['skystackrs']['path']}/skystackrs"
+	user "skystack"
+	group "skystack"
+end
+
+execute "change perms" do
+	command "chown -R skystack:skystack /opt/skystack"
+end
+
+execute "move skystackrs" do
+	cwd "#{node['skystackrs']['path']}/skystackrs"
+	command "make"
+	user "skystack"
+	group "skystack"
+end
 
 service "skystackrs" do
   supports :start => true, :stop => true, :debug => true

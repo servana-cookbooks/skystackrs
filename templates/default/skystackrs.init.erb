@@ -1,7 +1,16 @@
 #!/bin/sh
+### BEGIN INIT INFO
+# Provides:          skystackrs
+# Required-Start:    $all
+# Required-Stop:     $local_fs $remote_fs $network $syslog $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# Description:       start/stop skystack remote server
+### END INIT INFO
 
+USER=<%= node['skystackrs']['user'] %>
 LOCAL_PATH=<%= node['skystackrs']['path'] %>/skystackrs
-
 PA="$LOCAL_PATH/ebin $LOCAL_PATH/deps/*/ebin $LOCAL_PATH/dist/*/ebin"
 
 HOSTNAME=`hostname -s`
@@ -10,18 +19,18 @@ export HEART_COMMAND="/etc/init.d/skystackrs start"
 case $1 in
 
   start)
-    erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
-         -heart -detached -s skystackrs start
+    su "$USER" -c "erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
+         -heart -detached -s skystackrs start"
     echo  "Starting Skystack Remote Server"
     ;;
  debug)
-    erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
-         -s skystackrs start
+   su "$USER" -c "erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
+         -s skystackrs start"
     echo  "Starting Skystack Remote Server In Debug mode"
     ;;
   stop)
-    erl -pa $PA -sname stateserver_stop \
-           -noshell -s skystackrs stop_node skystackrs@$HOSTNAME
+    su "$USER" -c "erl -pa $PA -sname stateserver_stop \
+           -noshell -s skystackrs stop_node skystackrs@$HOSTNAME"
     echo "Stopping Skystack Remote Server"
     ;;
 
