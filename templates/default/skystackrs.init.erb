@@ -1,0 +1,33 @@
+#!/bin/sh
+
+LOCAL_PATH=<%= node[:skystackrs][:path] %>/skystackrs
+
+PA="$LOCAL_PATH/ebin $LOCAL_PATH/deps/*/ebin $LOCAL_PATH/dist/*/ebin"
+
+HOSTNAME=`hostname -s`
+export HEART_COMMAND="/etc/init.d/skystackrs start"
+
+case $1 in
+
+  start)
+    erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
+         -heart -detached -s skystackrs start
+    echo  "Starting Skystack Remote Server"
+    ;;
+ debug)
+    erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
+         -s skystackrs start
+    echo  "Starting Skystack Remote Server In Debug mode"
+    ;;
+  stop)
+    erl -pa $PA -sname stateserver_stop \
+           -noshell -s skystackrs stop_node skystackrs@$HOSTNAME
+    echo "Stopping Skystack Remote Server"
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop|debug}"
+    exit 1
+esac
+
+exit 0

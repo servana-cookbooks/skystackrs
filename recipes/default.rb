@@ -18,6 +18,22 @@
 
 include_recipe "erlang"
 
-execute "cd /opt/skystack/local; wget #{node['outpost']['host']}/#{node['outpost']['version']}/client.skystackrs-master.zip"
-execute "cd /opt/skystack/local; unzip client.skystackrs-master.zip"
-execute "cd /opt/skystack/local/client.skystackrs-master; make; ./detached-start.sh"
+execute "cd #{node['skystackrs']['path']}; wget #{node['outpost']['host']}/#{node['outpost']['version']}/client.skystackrs-master.zip"
+execute "cd #{node['skystackrs']['path']}; unzip client.skystackrs-master.zip"
+execute "mv #{node['skystackrs']['path']}/client.skystackrs-master #{node['skystackrs']['path']}/skystackrs"
+execute "cd #{node['skystackrs']['path']}/skystackrs; make;"
+
+service "skystackrs" do
+  supports :start => true, :stop => true, :debug => true
+  action :nothing
+end 
+
+template "skystackrs" do
+  path "/etc/init.d/skystackrs"
+  source "skystackrs.init.erb"
+  owner "root"
+  group "root"
+  mode "0755"
+  notifies :enable, "service[skystackrs]"
+  notifies :start, "service[skystackrs]"
+end
