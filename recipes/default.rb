@@ -1,5 +1,5 @@
-# Cookbook Name:: outpost
-# Recipe:: outpost::default
+# Cookbook Name:: skystackrs
+# Recipe:: skystackrs::default
 # 
 # Copyright 2012, Skystack, Ltd.
 #
@@ -18,7 +18,7 @@
 
 include_recipe "erlang"
 
-execute "cd #{node['skystackrs']['path']}; wget #{node['outpost']['host']}/#{node['outpost']['version']}/client.skystackrs-master.zip"
+execute "cd #{node['skystackrs']['path']}; wget #{node['skystackrs']['host']}/#{node['skystackrs']['version']}/client.skystackrs-master.zip"
 execute "cd #{node['skystackrs']['path']}; unzip client.skystackrs-master.zip"
 execute "mv #{node['skystackrs']['path']}/client.skystackrs-master #{node['skystackrs']['path']}/skystackrs"
 execute "cd #{node['skystackrs']['path']}/skystackrs; make;"

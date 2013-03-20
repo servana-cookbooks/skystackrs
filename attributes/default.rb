@@ -1,4 +1,3 @@
-default['outpost']['host'] = "http://outpost.skystack.com.s3.amazonaws.com"
-default['outpost']['path'] = "/opt/skystack/local/outpost"
-default['outpost']['log_path'] = "/opt/skystack/local/outpost/log"
-default['outpost']['version'] = "v1.0.0"
+default['skystackrs']['host'] = "http://outpost.skystack.com.s3.amazonaws.com"
+default['skystackrs']['path'] = "/opt/skystack/local"
+default['skystackrs']['version'] = "v1.0.0"
