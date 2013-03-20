@@ -24,8 +24,8 @@ case $1 in
     echo  "Starting Skystack Remote Server"
     ;;
  debug)
-   su "$USER" -c "erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
-         -s skystackrs start"
+   erl -pa $PA -boot start_sasl -name skystackrs@$HOSTNAME \
+         -s skystackrs start
     echo  "Starting Skystack Remote Server In Debug mode"
     ;;
   stop)
