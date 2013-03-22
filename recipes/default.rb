@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-include_recipe "erlang"
+include_recipe "erlang::esl"
 
 group node['skystackrs']['group'] do
   system true
@@ -106,7 +106,7 @@ execute "change perms" do
 	command "chown -R skystack:skystack /opt/skystack"
 end
 
-execute "move skystackrs" do
+execute "make skystackrs" do
 	cwd "#{node['skystackrs']['path']}/skystackrs"
 	command "make"
 	user "skystack"
