@@ -29,7 +29,7 @@ case $1 in
     echo  "Starting Skystack Remote Server In Debug mode"
     ;;
   stop)
-    su $SSUSER -c "export HOME=$LOCAL_PATH;cd $LOCAL_PATH; erl -pa $PA -sname stateserver_stop \
+    su $SSUSER -c "export HOME=$LOCAL_PATH;cd $LOCAL_PATH; erl -pa $PA -sname skystackrs_stop \
            -noshell -s skystackrs stop_node skystackrs@$HOSTNAME"
     echo "Stopping Skystack Remote Server"
     ;;

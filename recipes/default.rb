@@ -106,11 +106,32 @@ execute "change perms" do
 	command "chown -R skystack:skystack /opt/skystack"
 end
 
+execute "make clean skystackrs" do
+  cwd "#{node['skystackrs']['path']}/skystackrs"
+  command "make clean"
+  user "skystack"
+  group "skystack"
+end
+
 execute "make skystackrs" do
 	cwd "#{node['skystackrs']['path']}/skystackrs"
 	command "make"
 	user "skystack"
 	group "skystack"
+end
+
+execute "make clean skystackrs" do
+  cwd "#{node['skystackrs']['path']}/skystackrs"
+  command "make clean"
+  user "skystack"
+  group "skystack"
+end
+
+execute "make skystackrs" do
+  cwd "#{node['skystackrs']['path']}/skystackrs"
+  command "make"
+  user "skystack"
+  group "skystack"
 end
 
 link "#{node['skystackrs']['path']}/skystackrs/log" do
