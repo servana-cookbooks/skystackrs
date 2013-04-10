@@ -107,7 +107,7 @@ execute "change perms" do
 end
 
 execute "make clean skystackrs" do
-  environment {"HOME"=>"#{node['skystackrs']['path']}"}
+  environment ({"HOME"=>"#{node['skystackrs']['path']}"})
   cwd "#{node['skystackrs']['path']}/skystackrs"
   command "make clean"
   user "skystack"
@@ -115,7 +115,7 @@ execute "make clean skystackrs" do
 end
 
 execute "make skystackrs" do
-  environment {"HOME"=>"#{node['skystackrs']['path']}"}
+  environment ({"HOME"=>"#{node['skystackrs']['path']}"})
 	cwd "#{node['skystackrs']['path']}/skystackrs"
 	command "make"
 	user "skystack"
@@ -123,7 +123,7 @@ execute "make skystackrs" do
 end
 
 execute "make clean skystackrs" do
-  environment {"HOME"=>"#{node['skystackrs']['path']}"}
+  environment ({"HOME"=>"#{node['skystackrs']['path']}"})
   cwd "#{node['skystackrs']['path']}/skystackrs"
   command "make clean"
   user "skystack"
@@ -131,7 +131,7 @@ execute "make clean skystackrs" do
 end
 
 execute "make skystackrs" do
-  environment {"HOME"=>"#{node['skystackrs']['path']}"}
+  environment ({"HOME"=>"#{node['skystackrs']['path']}"})
   cwd "#{node['skystackrs']['path']}/skystackrs"
   command "make"
   user "skystack"
