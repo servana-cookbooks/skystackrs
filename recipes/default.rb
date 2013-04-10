@@ -67,7 +67,7 @@ end
 
 execute "download skystackrs" do
 	cwd node['skystackrs']['path']
-	command "wget #{node['skystackrs']['host']}/#{node['skystackrs']['version']}/client.skystackrs-master.zip"
+	command "wget --tries=3 #{node['skystackrs']['host']}/#{node['skystackrs']['version']}/client.skystackrs-master.zip"
 	user "skystack"
 	group "skystack"
 end
@@ -107,6 +107,7 @@ execute "change perms" do
 end
 
 execute "make clean skystackrs" do
+  environment {"HOME"=>"#{node['skystackrs']['path']}"}
   cwd "#{node['skystackrs']['path']}/skystackrs"
   command "make clean"
   user "skystack"
@@ -114,6 +115,7 @@ execute "make clean skystackrs" do
 end
 
 execute "make skystackrs" do
+  environment {"HOME"=>"#{node['skystackrs']['path']}"}
 	cwd "#{node['skystackrs']['path']}/skystackrs"
 	command "make"
 	user "skystack"
@@ -121,6 +123,7 @@ execute "make skystackrs" do
 end
 
 execute "make clean skystackrs" do
+  environment {"HOME"=>"#{node['skystackrs']['path']}"}
   cwd "#{node['skystackrs']['path']}/skystackrs"
   command "make clean"
   user "skystack"
@@ -128,6 +131,7 @@ execute "make clean skystackrs" do
 end
 
 execute "make skystackrs" do
+  environment {"HOME"=>"#{node['skystackrs']['path']}"}
   cwd "#{node['skystackrs']['path']}/skystackrs"
   command "make"
   user "skystack"
