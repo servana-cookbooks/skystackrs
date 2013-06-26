@@ -43,6 +43,14 @@ link "/etc/init.d/skystackrs" do
   to "#{node['skystackrs']['path']}/skystackrs/bin/skystackrs"
 end
 
+directory "/tmp#{node['skystackrs']['path']}/skystackrs" do
+   mode 00755
+   action :create
+   recursive true
+   user "skystack"
+   group "skystack"
+end
+
 execute "change perms" do
   command "chown -R skystack:skystack /tmp#{node['skystackrs']['path']}/skystackrs"
 end
