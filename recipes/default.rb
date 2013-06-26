@@ -44,7 +44,7 @@ link "/etc/init.d/skystackrs" do
 end
 
 execute "change perms" do
-  command "chown -R skystack:skystack /tmp/#{node['skystackrs']['path']}/skystackrs"
+  command "chown -R skystack:skystack /tmp#{node['skystackrs']['path']}/skystackrs"
 end
 
 execute "change perms" do
