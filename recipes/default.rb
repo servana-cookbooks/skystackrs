@@ -25,6 +25,12 @@ else
       get_skystackrs_file =  "skystackrs-v#{node['skystackrs']['version']}-i686.tgz"
 end
 
+execute "remove old skystackrs package" do
+    cwd "/opt/skystack/downloads"
+    command "rm #{get_skystackrs_file}"
+    only_if do File.exists?("/opt/skystack/downloads/#{get_skystackrs_file}") end
+end
+
 execute "download skystackrs" do
     cwd "/opt/skystack/downloads"
     command "wget --tries=3 #{node['skystackrs']['host']}/#{get_skystackrs_file}"
