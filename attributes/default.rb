@@ -1,6 +1,6 @@
 default['skystackrs']['host'] = "http://rs.skystack.com.s3.amazonaws.com"
 default['skystackrs']['path'] = "/opt/skystack/local"
-default['skystackrs']['version'] = "v1.0.0"
+default['skystackrs']['version'] = "1"
 default['skystackrs']['user'] = "skystack"
 default['skystackrs']['group'] = "skystack"
 

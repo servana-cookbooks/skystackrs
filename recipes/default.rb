@@ -16,138 +16,45 @@
 # limitations under the License.
 #
 
-include_recipe "erlang::esl"
-
-group node['skystackrs']['group'] do
-  system true
-  action :create
-end
-
-user node['skystackrs']['user'] do
-  gid node['skystackrs']['group']
-  shell "/bin/bash"
-  supports :manage_home => false
-  system true
-  action :create
-end
-
-execute "change perms" do
-	command "chown -R skystack:skystack /opt/skystack"
-end
-
-#group node['skystackrs']['group'] do
-#  action :modify
-#  members "#{node['skystackrs']['user']}"
-#  append true
-#end
-
-directory '/opt/skystack' do
-    mode 00755
-    action :create
-    owner 'skystack'
-    group 'skystack'
-    recursive true
-end
-
-directory '/opt/skystack/logs/skystackrs' do
-    mode 00755
-    action :create
-    owner 'skystack'
-    group 'skystack'
-    recursive true
-end
-
-execute "delete prev client.skystackrs-master.zip if exists" do
-	cwd node['skystackrs']['path']
-	command "rm client.skystackrs-master.zip"
-	user "skystack"
-	group "skystack"
-	only_if do File.exists?("#{node['skystackrs']['path']}/client.skystackrs-master.zip") end
+case node['kernel']['machine']
+  when "x86_64"
+      get_skystackrs_file =  "skystackrs-v#{node['skystackrs']['version']}-x86_64.tgz"
+  when "i686"
+      get_skystackrs_file =  "skystackrs-v#{node['skystackrs']['version']}-i686.tgz"
+else
+      get_skystackrs_file =  "skystackrs-v#{node['skystackrs']['version']}-i686.tgz"
 end
 
 execute "download skystackrs" do
-	cwd node['skystackrs']['path']
-	command "wget --tries=3 #{node['skystackrs']['host']}/#{node['skystackrs']['version']}/client.skystackrs-master.zip"
-	user "skystack"
-	group "skystack"
-end
-
-execute "unzip skystackrs" do
-	cwd node['skystackrs']['path']
-	command "unzip client.skystackrs-master.zip"
-	user "skystack"
-	group "skystack"
-end
-
-execute "delete zip skystackrs" do
     cwd node['skystackrs']['path']
-    command "rm client.skystackrs-master.zip"
+    command "wget --tries=3 #{node['skystackrs']['host']}/#{get_skystackrs_file}"
     user "skystack"
     group "skystack"
 end
 
-execute "delete skystackrs if exists" do
-	cwd node['skystackrs']['path']
-	command "rm -rf #{node['skystackrs']['path']}/skystackrs"
-	user "skystack"
-	group "skystack"
-	only_if do File.exists?("#{node['skystackrs']['path']}/skystackrs") end
+execute "unzip skystackrs" do
+  cwd node['skystackrs']['path']
+  command "tar -xzf #{get_skystackrs_file}"
+  user "skystack"
+  group "skystack"
 end
 
-execute "move new skystackrs" do
-	cwd node['skystackrs']['path']
-	command "mv #{node['skystackrs']['path']}/client.skystackrs-master #{node['skystackrs']['path']}/skystackrs"
-	user "skystack"
-	group "skystack"
-	only_if do !File.exists?("#{node['skystackrs']['path']}/skystackrs") end
+link "#{node['skystackrs']['path']}/skystackrs/bin/skystackrs" do
+  to "/etc/init.d/skystackrs"
 end
 
 execute "change perms" do
-	command "chown -R skystack:skystack /opt/skystack"
+  command "chown -R skystack:skystack /tmp/#{node['skystackrs']['path']}/skystackrs"
 end
 
-execute "make clean skystackrs" do
-  environment ({"HOME"=>"#{node['skystackrs']['path']}"})
-  cwd "#{node['skystackrs']['path']}/skystackrs"
-  command "make clean"
-  user "skystack"
-  group "skystack"
-end
-
-execute "make skystackrs" do
-  environment ({"HOME"=>"#{node['skystackrs']['path']}"})
-	cwd "#{node['skystackrs']['path']}/skystackrs"
-	command "make"
-	user "skystack"
-	group "skystack"
-end
-
-execute "make clean skystackrs" do
-  environment ({"HOME"=>"#{node['skystackrs']['path']}"})
-  cwd "#{node['skystackrs']['path']}/skystackrs"
-  command "make clean"
-  user "skystack"
-  group "skystack"
-end
-
-execute "make skystackrs" do
-  environment ({"HOME"=>"#{node['skystackrs']['path']}"})
-  cwd "#{node['skystackrs']['path']}/skystackrs"
-  command "make"
-  user "skystack"
-  group "skystack"
-end
-
-link "#{node['skystackrs']['path']}/skystackrs/log" do
- 	to "/opt/skystack/logs/skystackrs"
- 	owner 'skystack'
- 	group 'skystack'
+execute "change perms" do
+  command "chown -R skystack:skystack #{node['skystackrs']['path']}/skystackrs"
 end
 
 service "skystackrs" do
-  supports :start => true, :stop => true, :debug => true
+  supports :start => true, :stop => true, :console => true
   action :nothing
-end 
+end
 
 template "skystackrs" do
   path "/etc/init.d/skystackrs"
@@ -161,4 +68,4 @@ end
 
 service "skystackrs" do
   action :start
-end 
+end
