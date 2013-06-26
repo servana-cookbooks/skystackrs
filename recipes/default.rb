@@ -39,8 +39,8 @@ execute "unzip skystackrs" do
   group "skystack"
 end
 
-link "#{node['skystackrs']['path']}/skystackrs/bin/skystackrs" do
-  to "/etc/init.d/skystackrs"
+link "/etc/init.d/skystackrs" do
+  to "#{node['skystackrs']['path']}/skystackrs/bin/skystackrs"
 end
 
 execute "change perms" do
