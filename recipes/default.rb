@@ -56,16 +56,6 @@ service "skystackrs" do
   action :nothing
 end
 
-template "skystackrs" do
-  path "/etc/init.d/skystackrs"
-  source "skystackrs.init.erb"
-  owner "root"
-  group "root"
-  mode "0755"
-  notifies :enable, "service[skystackrs]"
-  notifies :start, "service[skystackrs]"
-end
-
 service "skystackrs" do
   action :start
 end
