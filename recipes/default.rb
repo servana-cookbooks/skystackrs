@@ -16,6 +16,23 @@
 # limitations under the License.
 #
 
+group node['skystackrs']['group'] do
+  system true
+  action :create
+end
+
+user node['skystackrs']['user'] do
+  gid node['skystackrs']['group']
+  shell "/bin/bash"
+  supports :manage_home => false
+  system true
+  action :create
+end
+
+execute "change perms" do
+  command "chown -R skystack:skystack /opt/skystack"
+end
+
 case node['kernel']['machine']
   when "x86_64"
       get_skystackrs_file =  "skystackrs-v#{node['skystackrs']['version']}-x86_64.tgz"
