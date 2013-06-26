@@ -26,7 +26,7 @@ else
 end
 
 execute "download skystackrs" do
-    cwd node['skystackrs']['path']
+    cwd "/opt/skystack/downloads"
     command "wget --tries=3 #{node['skystackrs']['host']}/#{get_skystackrs_file}"
     user "skystack"
     group "skystack"
@@ -34,7 +34,7 @@ end
 
 execute "unzip skystackrs" do
   cwd node['skystackrs']['path']
-  command "tar -xzf #{get_skystackrs_file}"
+  command "tar -xzf /opt/skystack/downloads/#{get_skystackrs_file}"
   user "skystack"
   group "skystack"
 end
