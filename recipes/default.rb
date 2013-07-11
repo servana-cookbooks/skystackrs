@@ -33,9 +33,33 @@ execute "change perms" do
   command "chown -R skystack:skystack /opt/skystack"
 end
 
+File.open('/opt/skystack/etc/userdata.conf').each_line{ |s|
+
+      config = s.split("=")
+      key = config[0]
+
+      if !config[1].nil?
+        
+          quoted = config[1].strip
+          v = quoted.gsub(/"/,"")
+          value = v
+
+          if ! value.nil?
+            node.set['userdata'][config[0]] = value
+          end
+
+      end
+}
+
+
 case node['kernel']['machine']
   when "x86_64"
+    if node['userdata']['CLOUD'] == 'Linode'
+      get_skystackrs_file =  "skystackrs-linode-v#{node['skystackrs']['version']}-x86_64.tgz"
+    else
       get_skystackrs_file =  "skystackrs-v#{node['skystackrs']['version']}-x86_64.tgz"
+    end
+
   when "i686"
       get_skystackrs_file =  "skystackrs-v#{node['skystackrs']['version']}-i686.tgz"
 else
